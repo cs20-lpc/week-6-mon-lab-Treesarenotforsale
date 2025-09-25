@@ -1,64 +1,71 @@
 #include <algorithm>
-#include <cstdlib>
+#include <cstddef>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+
 using namespace std;
 
-/*******************************************************************************
- * Function prototype
-*******************************************************************************/
-
+// Function prototype for the recursive function.
 template <typename T>
-T findMaxRecTail(const T[], const int, int = 0);
+T findMaxRecTail(const T arr[], const int SIZE, int i, T max_val);
 
-/*******************************************************************************
- * Description:
- * Starting point of the program. Creates two arrays, one fixed and the other
- * random. Determines the maximum value by calling the local function and the
- * standard function.
- * 
- * Input:
- * N/A
- *
- * Output:
- * An integer to signal to the OS the exit code.
-*******************************************************************************/
+// The helper function to simplify the initial call.
+template <typename T>
+T findMax(const T arr[], const int SIZE) {
+    if (SIZE == 0) {
+        // Handle an empty array case.
+        return T(); 
+    }
+    return findMaxRecTail(arr, SIZE, 0, arr[0]);
+}
+
+// Function that finds the maximum value using tail recursion.
+template <typename T>
+T findMaxRecTail(const T arr[], const int SIZE, int i, T max_val) {
+    // Base case: We've reached the end of the array.
+    if (i == SIZE) {
+        return max_val;
+    }
+
+    // Recursive step: Update the max_val if the current element is greater.
+    if (arr[i] > max_val) {
+        max_val = arr[i];
+    }
+
+    // Tail call: The recursive call is the last operation.
+    return findMaxRecTail(arr, SIZE, i + 1, max_val);
+}
 
 int main() {
-    // create the array
+    // Create the array
     const int SIZE = 10;
-    int myArray[SIZE] = {
-        5, 23, 0, -2, 4,
-        9, 11, 21, 130, 6
-    };
+    int my_array[SIZE] = {5, 23, 0, -2, 4, 9, 11, 21, 130, 6};
 
-    // display the maximum
+    // Display the maximum using recursion
     cout << setfill('-') << setw(40) << "" << endl;
-    cout << "Maximum using Recursion: "
-         << findMaxRecTail(myArray, SIZE) << endl
-         << "Should be 130 for the fixed array\n";
-    cout << setfill('-') << setw(40) << "" << endl << endl;
+    cout << "Maximum using Recursion: " << findMax(my_array, SIZE) << endl;
+    cout << "Should be 130 for the fixed array\n" << endl;
+    cout << setfill('-') << setw(40) << "" << endl;
 
-    // create a random array
+    // Create a random array
     const int SIZE_2 = 1000;
     const int MAX_VAL = 10000;
-    int randArray[SIZE_2];
+    int rand_array[SIZE_2];
     srand(time(0));
-    for (int& elem : randArray) {
+    for (int &elem : rand_array) {
         elem = rand() % MAX_VAL;
     }
 
-    // find the maximum using C++ standard's algorithm
+    // Find the maximum using C++ standard's algorithm
     cout << setfill('-') << setw(40) << "" << endl;
-    cout << "Maximum using Standard Algorithm: "
-         << *max_element(randArray, randArray + SIZE_2) << endl;
-
-    // find the maximum using the recursive implementation
-    cout << "Maximum using Recursion: "
-         << findMaxRecTail(randArray, SIZE_2) << endl;
+    cout << "Maximum using Standard Algorithm: " << endl;
+    cout << " " << *max_element(rand_array, rand_array + SIZE_2) << endl;
     cout << setfill('-') << setw(40) << "" << endl;
 
-    // terminate
+    // Find the maximum using the recursive implementation
+    cout << "Maximum using Recursion: " << findMax(rand_array, SIZE_2) << endl;
+    cout << setfill('-') << setw(40) << "" << endl;
+
     return 0;
 }
