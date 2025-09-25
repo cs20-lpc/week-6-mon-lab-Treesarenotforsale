@@ -7,7 +7,28 @@ using namespace std;
  * Function prototype
 *******************************************************************************/
 
-void towerHanoi(int, string, string, string, int&);
+/**
+ * Time Complexity Analysis
+ * The time complexity of the Tower of Hanoi problem is O(2^n).
+ * This is because the number of moves required to solve the puzzle
+ * with 'n' discs is 2^n - 1. Each recursive call corresponds to
+ * a move, so the total number of calls grows exponentially with n.
+ */
+void towerHanoi(int numDisks, string source, string buffer, string target, int& numMoves);
+
+void towerHanoi(int numDisks, string source, string buffer, string target, int& numMoves) {
+    if (numDisks > 0) {
+        // Step 1: Move n-1 disks from source to buffer.
+        towerHanoi(numDisks - 1, source, target, buffer, numMoves);
+
+        // Step 2: Move the nth disk from source to target.
+        cout << "Moving disc " << numDisks << " from rod " << source << " to rod " << target << endl;
+        numMoves++;
+
+        // Step 3: Move n-1 disks from buffer to target.
+        towerHanoi(numDisks - 1, buffer, source, target, numMoves);
+    }
+}
 
 /*******************************************************************************
  * Description:
